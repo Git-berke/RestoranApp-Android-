@@ -1,0 +1,98 @@
+package com.example.restoranaapp;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.restoranaapp.database.dao.UserDao;
+import com.example.restoranaapp.model.User;
+
+public class LoginActivity extends AppCompatActivity {
+
+    private EditText etUsername;
+    private EditText etPassword;
+    private Button btnLogin;
+    private TextView tvError;
+    private UserDao userDao;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+
+        // Check if already logged in
+        // SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
+        // String savedRole = prefs.getString("role", null);
+        // if (savedRole != null) {
+        //    navigateBasedOnRole(savedRole);
+        //    return;
+        // }
+
+        etUsername = findViewById(R.id.etUsername);
+        etPassword = findViewById(R.id.etPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+        tvError = findViewById(R.id.tvError);
+
+        userDao = new UserDao(this);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptLogin();
+            }
+        });
+    }
+
+    private void attemptLogin() {
+        String username = etUsername.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+
+        // G3: Empty check
+        if (username.isEmpty() || password.isEmpty()) {
+            tvError.setText("Kullanıcı adı ve şifre boş bırakılamaz.");
+            tvError.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        // G2, G4: Database check
+        User user = userDao.login(username, password);
+
+        if (user != null) {
+            // Login successful
+            tvError.setVisibility(View.INVISIBLE);
+            
+            // Save session
+            SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt("userId", user.getId());
+            editor.putString("username", user.getUsername());
+            editor.putString("role", user.getRole());
+            editor.apply();
+
+            // G5: Role based navigation
+            navigateBasedOnRole(user.getRole());
+        } else {
+            // G4: Login failed
+            tvError.setText("Geçersiz kullanıcı adı veya şifre.");
+            tvError.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void navigateBasedOnRole(String role) {
+        Intent intent;
+        if ("ADMIN".equals(role)) {
+            intent = new Intent(LoginActivity.this, AdminMainActivity.class);
+        } else {
+            intent = new Intent(LoginActivity.this, WaiterMainActivity.class);
+        }
+        startActivity(intent);
+        finish(); // Close LoginActivity
+    }
+}
+

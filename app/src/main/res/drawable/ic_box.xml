@@ -1,0 +1,14 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:fillColor="#FFA000"
+      android:pathData="M15,1.5C14.73,1.5 14.5,1.73 14.5,2C14.5,2.27 14.73,2.5 15,2.5C18.03,2.5 20.5,4.97 20.5,8C20.5,11.03 18.03,13.5 15,13.5H14V11L10.5,14.5L14,18V15.5H15C19.14,15.5 22.5,12.14 22.5,8C22.5,3.86 19.14,1.5 15,1.5M4,2H14V7H4V2M4,8H12V13H4V8M4,14H12V19H4V14M14,19H20V21H14V19Z"/>
+  <!-- Simplified box icon representation -->
+  <path
+      android:fillColor="#FFA000"
+      android:pathData="M19,3h-4.18C14.4,1.84 13.3,1 12,1c-1.3,0 -2.4,0.84 -2.82,2H5c-1.1,0 -2,0.9 -2,2v14c0,1.1 0.9,2 2,2h14c1.1,0 2,-0.9 2,-2V5c0,-1.1 -0.9,-2 -2,-2zm-7,0c0.55,0 1,0.45 1,1s-0.45,1 -1,1 -1,-0.45 -1,-1 0.45,-1 1,-1zm2,14H7v-2h7v2zm3,-4H7v-2h10v2zm0,-4H7V7h10v2z"/>
+</vector>
+
