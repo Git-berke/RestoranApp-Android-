@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.restoranaapp.R;
 import com.example.restoranaapp.model.OrderItem;
 import com.example.restoranaapp.model.Product;
@@ -55,8 +56,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         holder.tvQtyPrice.setText(item.getQuantity() + " x " + String.format("%.2f ₺", item.getUnitPrice()));
         holder.tvPrice.setText(String.format("%.2f ₺", item.getLineTotal()));
         
-        if (imagePath != null) {
-            holder.imgProduct.setImageURI(Uri.parse(imagePath));
+        if (imagePath != null && !imagePath.isEmpty()) {
+            Glide.with(context)
+                .load(imagePath)
+                .placeholder(R.drawable.ic_food_placeholder)
+                .error(R.drawable.ic_food_placeholder)
+                .into(holder.imgProduct);
         } else {
             holder.imgProduct.setImageResource(R.drawable.ic_food_placeholder);
         }

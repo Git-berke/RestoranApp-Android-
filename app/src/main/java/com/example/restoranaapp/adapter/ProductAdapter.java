@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.restoranaapp.R;
 import com.example.restoranaapp.model.Product;
 
@@ -60,8 +61,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.tvStatus.setTextColor(context.getResources().getColor(android.R.color.holo_green_dark));
         }
 
-        if (product.getImagePath() != null) {
-            holder.imgProduct.setImageURI(Uri.parse(product.getImagePath()));
+        if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
+            // Glide ile URL'den veya dosya yolundan yükleme
+            Glide.with(context)
+                .load(product.getImagePath())
+                .placeholder(R.drawable.ic_food_placeholder)
+                .error(R.drawable.ic_food_placeholder)
+                .into(holder.imgProduct);
         } else {
             holder.imgProduct.setImageResource(R.drawable.ic_food_placeholder);
         }
