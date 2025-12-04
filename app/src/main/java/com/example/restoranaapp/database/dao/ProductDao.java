@@ -73,6 +73,19 @@ public class ProductDao {
         product.setCategoryId(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PRODUCT_CATEGORY_ID)));
         product.setImagePath(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PRODUCT_IMAGE_PATH)));
         product.setIsActive(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_IS_ACTIVE)));
+        
+        // Handle stock fields (may not exist in older DB versions)
+        try {
+            product.setStockQuantity(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PRODUCT_STOCK_QUANTITY)));
+            product.setStockUnit(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PRODUCT_STOCK_UNIT)));
+            product.setCriticalLevel(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_PRODUCT_CRITICAL_LEVEL)));
+        } catch (Exception e) {
+            // Set defaults if columns don't exist
+            product.setStockQuantity(0);
+            product.setStockUnit("Adet");
+            product.setCriticalLevel(10);
+        }
+        
         return product;
     }
 
@@ -85,6 +98,9 @@ public class ProductDao {
         values.put(DatabaseHelper.COL_PRODUCT_CATEGORY_ID, product.getCategoryId());
         values.put(DatabaseHelper.COL_PRODUCT_IMAGE_PATH, product.getImagePath());
         values.put(DatabaseHelper.COL_IS_ACTIVE, product.getIsActive());
+        values.put(DatabaseHelper.COL_PRODUCT_STOCK_QUANTITY, product.getStockQuantity());
+        values.put(DatabaseHelper.COL_PRODUCT_STOCK_UNIT, product.getStockUnit());
+        values.put(DatabaseHelper.COL_PRODUCT_CRITICAL_LEVEL, product.getCriticalLevel());
         
         return db.update(DatabaseHelper.TABLE_PRODUCTS, values, DatabaseHelper.COL_ID + " = ?", new String[]{String.valueOf(product.getId())});
     }

@@ -4,15 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AdminMainActivity extends AppCompatActivity {
 
-    private LinearLayout cardMenu, cardWaiter, cardTable, cardReports;
-    private Button btnLogout;
+    private LinearLayout cardMenu, cardWaiter, cardTable, cardReports, cardStock;
+    private FrameLayout btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class AdminMainActivity extends AppCompatActivity {
         cardWaiter = findViewById(R.id.cardWaiter);
         cardTable = findViewById(R.id.cardTable);
         cardReports = findViewById(R.id.cardReports);
+        cardStock = findViewById(R.id.cardStock);
         btnLogout = findViewById(R.id.btnLogout);
 
         cardMenu.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +52,13 @@ public class AdminMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AdminMainActivity.this, ReportsActivity.class));
+            }
+        });
+
+        cardStock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AdminMainActivity.this, StockTrackingActivity.class));
             }
         });
 
