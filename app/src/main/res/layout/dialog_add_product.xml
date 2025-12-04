@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -7,50 +8,137 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <!-- URL Input with Paste Button -->
+        <!-- Image Preview Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ürün Resmi URL *"
+            android:text="Ürün Görseli"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
-        
+            android:textColor="@color/text_dark"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Large Image Preview -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#F5F5F5">
+
+            <ImageView
+                android:id="@+id/imgProductPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_food_placeholder"
+                android:scaleType="centerCrop"
+                android:contentDescription="Ürün görseli" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Image Selection Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
-            
-            <EditText
-                android:id="@+id/etImageUrl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="https://..."
-                android:inputType="textUri"
-                android:maxLines="1"/>
+            android:layout_marginBottom="24dp"
+            android:gravity="center">
 
-            <ImageView
-                android:id="@+id/btnPaste"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/ic_content_paste"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
-                android:tooltipText="Yapıştır"/>
-                
-            <ImageView
-                android:id="@+id/imgProductPreview"
-                android:layout_width="48dp"
+            <Button
+                android:id="@+id/btnPickFromGallery"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/ic_food_placeholder"
-                android:scaleType="centerCrop"
-                android:background="#EEEEEE"/>
+                android:layout_weight="1"
+                android:text="📷 Galeriden Seç"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/primary_orange"
+                android:textColor="@color/white"
+                android:layout_marginEnd="8dp" />
+
+            <Button
+                android:id="@+id/btnEnterUrl"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="🔗 URL Gir"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/text_gray"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp" />
+
         </LinearLayout>
+
+        <!-- URL Input Section (Initially Hidden) -->
+        <LinearLayout
+            android:id="@+id/layoutUrlInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resim URL'si"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/etImageUrl"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/input_background"
+                    android:hint="https://example.com/image.jpg"
+                    android:inputType="textUri"
+                    android:paddingHorizontal="16dp"
+                    android:textSize="14sp"
+                    android:maxLines="1" />
+
+                <ImageView
+                    android:id="@+id/btnPaste"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_content_paste"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="12dp"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Yapıştır"
+                    app:tint="@color/primary_orange" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnLoadUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Yükle"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/primary_orange"
+                android:textColor="@color/white"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="24dp" />
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_light"
+            android:layout_marginVertical="16dp" />
 
         <TextView
             android:layout_width="wrap_content"
