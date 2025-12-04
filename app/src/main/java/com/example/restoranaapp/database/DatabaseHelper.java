@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "RestoranaApp.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Table Names
     public static final String TABLE_USERS = "users";
@@ -49,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_TABLE_NUMBER = "table_number";
     public static final String COL_TABLE_NAME = "table_name";
     public static final String COL_TABLE_STATUS = "status";
+    public static final String COL_TABLE_AREA = "area";
 
     // Orders Table Columns
     public static final String COL_ORDER_TABLE_ID = "table_id";
@@ -116,7 +117,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COL_TABLE_NUMBER + " INTEGER UNIQUE NOT NULL, "
             + COL_TABLE_NAME + " TEXT, "
-            + COL_TABLE_STATUS + " TEXT NOT NULL, " // EMPTY, ACTIVE
+            + COL_TABLE_STATUS + " TEXT NOT NULL, " // EMPTY, ACTIVE, RESERVED
+            + COL_TABLE_AREA + " TEXT DEFAULT 'Salon', "
             + COL_IS_ACTIVE + " INTEGER NOT NULL DEFAULT 1, "
             + COL_CREATED_AT + " TEXT, "
             + COL_UPDATED_AT + " TEXT"
@@ -215,7 +217,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         
-        // For future versions, add else if (oldVersion < 5) ...
+        if (oldVersion < 5) {
+            // Migration from V4 to V5: Add area column to tables
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_TABLES + " ADD COLUMN " + COL_TABLE_AREA + " TEXT DEFAULT 'Salon'");
+            } catch (Exception e) {
+                // Column might already exist or other error, log it but don't crash
+            }
+        }
+        
+        // For future versions, add else if (oldVersion < 6) ...
     }
     
     @Override

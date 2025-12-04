@@ -23,7 +23,8 @@ public class TableDao {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_TABLE_NUMBER, table.getTableNumber());
         values.put(DatabaseHelper.COL_TABLE_NAME, table.getTableName());
-        values.put(DatabaseHelper.COL_TABLE_STATUS, "EMPTY"); // Default
+        values.put(DatabaseHelper.COL_TABLE_STATUS, table.getStatus() != null ? table.getStatus() : "EMPTY"); // Default
+        values.put(DatabaseHelper.COL_TABLE_AREA, table.getArea() != null ? table.getArea() : "Salon"); // Default
         values.put(DatabaseHelper.COL_IS_ACTIVE, table.getIsActive());
         values.put(DatabaseHelper.COL_CREATED_AT, table.getCreatedAt());
         
@@ -45,6 +46,14 @@ public class TableDao {
                 table.setTableName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TABLE_NAME)));
                 table.setStatus(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TABLE_STATUS)));
                 table.setIsActive(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_IS_ACTIVE)));
+                
+                // Handle area field (may not exist in older DB versions)
+                try {
+                    table.setArea(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_TABLE_AREA)));
+                } catch (Exception e) {
+                    table.setArea("Salon"); // Default
+                }
+                
                 tables.add(table);
             } while (cursor.moveToNext());
             cursor.close();
@@ -64,6 +73,7 @@ public class TableDao {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COL_TABLE_NUMBER, table.getTableNumber());
         values.put(DatabaseHelper.COL_TABLE_NAME, table.getTableName());
+        values.put(DatabaseHelper.COL_TABLE_AREA, table.getArea());
         values.put(DatabaseHelper.COL_IS_ACTIVE, table.getIsActive());
         
         return db.update(DatabaseHelper.TABLE_TABLES, values, DatabaseHelper.COL_ID + " = ?", new String[]{String.valueOf(table.getId())});
