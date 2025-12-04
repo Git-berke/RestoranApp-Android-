@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,8 +21,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btnLogin;
     private TextView tvError;
-    private TextView tvForgotPassword;
-    private TextView tvSignUp;
     private ImageView ivTogglePassword;
     private UserDao userDao;
     private boolean isPasswordVisible = false;
@@ -45,8 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvError = findViewById(R.id.tvError);
-        tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        tvSignUp = findViewById(R.id.tvSignUp);
         ivTogglePassword = findViewById(R.id.ivTogglePassword);
 
         userDao = new UserDao(this);
@@ -63,22 +58,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 togglePasswordVisibility();
-            }
-        });
-
-        // Forgot Password click (placeholder)
-        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Şifre sıfırlama özelliği yakında eklenecek", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Sign Up click (placeholder)
-        tvSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Kayıt olma özelliği yakında eklenecek", Toast.LENGTH_SHORT).show();
             }
         });
     }
