@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer circle with 20% opacity -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/primary_light"/>
+            <size android:width="120dp" android:height="120dp"/>
+        </shape>
+    </item>
+    <!-- Inner circle with full opacity -->
+    <item
+        android:top="16dp"
+        android:bottom="16dp"
+        android:left="16dp"
+        android:right="16dp">
+        <shape android:shape="oval">
+            <solid android:color="@color/primary"/>
+            <size android:width="88dp" android:height="88dp"/>
+        </shape>
+    </item>
+</layer-list>
+

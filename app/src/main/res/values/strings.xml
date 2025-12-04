@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">RestoranaApp</string>
+    <string name="app_name">RestoMate</string>
+    <string name="login_title">RestoMate</string>
+    <string name="login_subtitle">Lezzet Yönetim Sistemi</string>
+    <string name="username_label">Kullanıcı Adı</string>
+    <string name="password_label">Şifre</string>
+    <string name="username_hint">Kullanıcı adınızı girin</string>
+    <string name="password_hint">Şifrenizi girin</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="forgot_password">Şifrenizi mi unuttunuz?</string>
+    <string name="no_account">Hesabınız yok mu? </string>
+    <string name="sign_up">Kayıt Ol</string>
+    <string name="error_empty_fields">Kullanıcı adı ve şifre boş bırakılamaz.</string>
+    <string name="error_invalid_credentials">Geçersiz kullanıcı adı veya şifre.</string>
 </resources>
