@@ -1,6 +1,9 @@
 package com.example.restoranaapp;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -26,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.restoranaapp.adapter.ProductAdapter;
 import com.example.restoranaapp.database.dao.CategoryDao;
 import com.example.restoranaapp.database.dao.ProductDao;
@@ -275,8 +279,9 @@ public class MenuManagementActivity extends AppCompatActivity {
         EditText etDesc = view.findViewById(R.id.etProdDesc);
         EditText etPrice = view.findViewById(R.id.etProdPrice);
         Spinner spinnerCat = view.findViewById(R.id.spinnerCategory);
+        EditText etImageUrl = view.findViewById(R.id.etImageUrl);
         dialogImgPreview = view.findViewById(R.id.imgProductPreview);
-        View btnSelectImg = view.findViewById(R.id.tvSelectImage);
+        ImageView btnPaste = view.findViewById(R.id.btnPaste);
 
         // Setup Spinner
         List<String> catNames = new ArrayList<>();
@@ -301,17 +306,58 @@ public class MenuManagementActivity extends AppCompatActivity {
             if (index != -1) spinnerCat.setSelection(index);
             
             if (product.getImagePath() != null) {
-                dialogImgPreview.setImageURI(Uri.parse(product.getImagePath()));
+                etImageUrl.setText(product.getImagePath());
+                Glide.with(this)
+                    .load(product.getImagePath())
+                    .placeholder(R.drawable.ic_food_placeholder)
+                    .error(R.drawable.ic_food_placeholder)
+                    .into(dialogImgPreview);
             }
         }
-
+        
+        // Paste Logic
+        btnPaste.setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null && clipboard.hasPrimaryClip()) {
+                ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+                if (item != null && item.getText() != null) {
+                    String pasteData = item.getText().toString();
+                    etImageUrl.setText(pasteData);
+                    // Trigger load
+                    if(!pasteData.isEmpty()){
+                        Glide.with(this)
+                            .load(pasteData)
+                            .placeholder(R.drawable.ic_food_placeholder)
+                            .error(R.drawable.ic_food_placeholder)
+                            .into(dialogImgPreview);
+                        Toast.makeText(this, "Yapıştırıldı!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(this, "Pano boş veya metin değil", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        
+        etImageUrl.setOnFocusChangeListener((v, hasFocus) -> {
+            if(!hasFocus){
+                String url = etImageUrl.getText().toString().trim();
+                if(!url.isEmpty()){
+                    Glide.with(this)
+                        .load(url)
+                        .placeholder(R.drawable.ic_food_placeholder)
+                        .error(R.drawable.ic_food_placeholder)
+                        .into(dialogImgPreview);
+                }
+            }
+        });
+        
         dialogImgPreview.setOnClickListener(v -> checkPermissionAndOpenGallery());
-        btnSelectImg.setOnClickListener(v -> checkPermissionAndOpenGallery());
 
         builder.setPositiveButton("Kaydet", (dialog, which) -> {
             String name = etName.getText().toString().trim();
             String priceStr = etPrice.getText().toString().trim();
             String desc = etDesc.getText().toString().trim();
+            String imageUrl = etImageUrl.getText().toString().trim();
             
             if (name.isEmpty() || priceStr.isEmpty() || catIds.isEmpty()) {
                 Toast.makeText(this, "Eksik bilgi", Toast.LENGTH_SHORT).show();
@@ -320,13 +366,12 @@ public class MenuManagementActivity extends AppCompatActivity {
             
             double price = Double.parseDouble(priceStr);
             int catId = catIds.get(spinnerCat.getSelectedItemPosition());
-            String imagePath = null;
-
-            // Handle Image Save
+            
+            String finalImagePath = imageUrl;
             if (selectedImageUri != null) {
-                imagePath = saveImageToInternalStorage(selectedImageUri);
-            } else if (product != null) {
-                imagePath = product.getImagePath(); // Keep old one if not changed
+                finalImagePath = saveImageToInternalStorage(selectedImageUri);
+            } else if (finalImagePath.isEmpty() && product != null) {
+                finalImagePath = product.getImagePath(); // keep old if nothing new
             }
 
             if (product == null) {
@@ -336,7 +381,7 @@ public class MenuManagementActivity extends AppCompatActivity {
                 newP.setPrice(price);
                 newP.setCategoryId(catId);
                 newP.setIsActive(1);
-                newP.setImagePath(imagePath);
+                newP.setImagePath(finalImagePath);
                 productDao.addProduct(newP);
                 Toast.makeText(this, "Ürün eklendi", Toast.LENGTH_SHORT).show();
             } else {
@@ -344,7 +389,7 @@ public class MenuManagementActivity extends AppCompatActivity {
                 product.setDescription(desc);
                 product.setPrice(price);
                 product.setCategoryId(catId);
-                product.setImagePath(imagePath);
+                product.setImagePath(finalImagePath);
                 productDao.updateProduct(product);
                 Toast.makeText(this, "Ürün güncellendi", Toast.LENGTH_SHORT).show();
             }

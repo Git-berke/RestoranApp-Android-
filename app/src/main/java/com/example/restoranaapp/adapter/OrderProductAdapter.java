@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.restoranaapp.R;
 import com.example.restoranaapp.model.Product;
 
@@ -65,8 +66,12 @@ public class OrderProductAdapter extends RecyclerView.Adapter<OrderProductAdapte
         }
         holder.tvQuantity.setText(String.valueOf(qty));
 
-        if (product.getImagePath() != null) {
-            holder.imgProduct.setImageURI(Uri.parse(product.getImagePath()));
+        if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
+            Glide.with(context)
+                .load(product.getImagePath())
+                .placeholder(R.drawable.ic_food_placeholder)
+                .error(R.drawable.ic_food_placeholder)
+                .into(holder.imgProduct);
         } else {
             holder.imgProduct.setImageResource(R.drawable.ic_food_placeholder);
         }

@@ -9,40 +9,48 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Image Selection -->
-        <FrameLayout
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_horizontal"
+        <!-- URL Input with Paste Button -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ürün Resmi URL *"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_marginBottom="16dp">
             
+            <EditText
+                android:id="@+id/etImageUrl"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="https://..."
+                android:inputType="textUri"
+                android:maxLines="1"/>
+
+            <ImageView
+                android:id="@+id/btnPaste"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_content_paste"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:tooltipText="Yapıştır"/>
+                
             <ImageView
                 android:id="@+id/imgProductPreview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
                 android:src="@drawable/ic_food_placeholder"
                 android:scaleType="centerCrop"
                 android:background="#EEEEEE"/>
-                
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_edit"
-                android:layout_gravity="bottom|end"
-                android:background="@drawable/circle_status"
-                android:backgroundTint="#FFFFFF"
-                android:padding="6dp"/>
-        </FrameLayout>
-        
-        <TextView
-            android:id="@+id/tvSelectImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fotoğraf Seç"
-            android:textColor="#1976D2"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"/>
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
