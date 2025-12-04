@@ -71,14 +71,23 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         }
         
         // Apply status visual based on isActive field and status
-        // isActive: 1 = Active/Enabled (Green), 0 = Passive/Disabled (Red/Gray)
+        // isActive: 1 = Active/Enabled (Green), 0 = Passive/Disabled (Grey/Dimmed)
         String status = table.getStatus();
         
         if (table.getIsActive() == 0) {
-            // Passive/Disabled table - Red border to indicate it's not available
-            holder.cardTable.setBackground(context.getResources().getDrawable(R.drawable.table_status_active));
+            // Passive/Disabled table - Grey/Dimmed to indicate it's disabled
+            holder.cardTable.setBackground(context.getResources().getDrawable(R.drawable.table_status_empty));
+            holder.cardTable.setAlpha(0.4f); // Dimmed opacity
+            holder.tvTableNumber.setTextColor(context.getResources().getColor(R.color.text_gray));
+            holder.tvTableName.setTextColor(context.getResources().getColor(R.color.text_gray));
+            holder.tvTableArea.setTextColor(context.getResources().getColor(R.color.text_gray));
         } else {
             // Active/Enabled table - check occupancy status
+            holder.cardTable.setAlpha(1.0f); // Full opacity
+            holder.tvTableNumber.setTextColor(context.getResources().getColor(R.color.text_dark));
+            holder.tvTableName.setTextColor(context.getResources().getColor(R.color.text_gray));
+            holder.tvTableArea.setTextColor(context.getResources().getColor(R.color.text_gray));
+            
             if (status != null && "ACTIVE".equalsIgnoreCase(status.trim())) {
                 // Occupied - Red background and border
                 holder.cardTable.setBackground(context.getResources().getDrawable(R.drawable.table_status_active));

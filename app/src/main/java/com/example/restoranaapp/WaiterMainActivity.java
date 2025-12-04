@@ -33,8 +33,8 @@ public class WaiterMainActivity extends AppCompatActivity {
         rvTables = findViewById(R.id.rvTables);
         tvWaiterInfo = findViewById(R.id.tvWaiterInfo);
         
-        // Grid Layout for tables
-        rvTables.setLayoutManager(new GridLayoutManager(this, 3)); // 3 columns
+        // Grid Layout for tables - 2 columns for mobile
+        rvTables.setLayoutManager(new GridLayoutManager(this, 2));
 
         findViewById(R.id.btnLogout).setOnClickListener(v -> logout());
         findViewById(R.id.btnActiveOrders).setOnClickListener(v -> {

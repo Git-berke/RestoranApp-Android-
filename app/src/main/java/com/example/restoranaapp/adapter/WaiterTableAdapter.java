@@ -5,11 +5,10 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restoranaapp.R;
@@ -49,24 +48,30 @@ public class WaiterTableAdapter extends RecyclerView.Adapter<WaiterTableAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RestaurantTable table = tableList.get(position);
         
+        // Display large table number
+        holder.tvTableNumber.setText(String.valueOf(table.getTableNumber()));
+        
+        // Optional: Show table name if not empty
         String name = table.getTableName();
-        if (name == null || name.isEmpty()) {
-            holder.tvName.setText("Masa " + table.getTableNumber());
+        if (name != null && !name.isEmpty() && !name.equals("Masa " + table.getTableNumber())) {
+            holder.tvTableName.setText(name);
+            holder.tvTableName.setVisibility(View.VISIBLE);
         } else {
-            holder.tvName.setText(name);
+            holder.tvTableName.setVisibility(View.GONE);
         }
 
-        // Status Colors based on G30
-        if ("ACTIVE".equals(table.getStatus())) {
+        // Simplified Status Colors - Clean and Modern
+        String status = table.getStatus();
+        if (status != null && "ACTIVE".equalsIgnoreCase(status.trim())) {
+            // Occupied - Red background and border
+            holder.cardTable.setBackground(context.getResources().getDrawable(R.drawable.table_status_active));
             holder.tvStatus.setText("DOLU");
-            holder.tvStatus.setTextColor(Color.RED); // Text Red
-            holder.imgTable.setColorFilter(Color.RED); // Icon Red
-            holder.container.setBackgroundColor(Color.parseColor("#FFEBEE")); // Light Red BG
+            holder.tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#D32F2F")));
         } else {
+            // Empty - White with green border
+            holder.cardTable.setBackground(context.getResources().getDrawable(R.drawable.table_status_empty));
             holder.tvStatus.setText("BOŞ");
-            holder.tvStatus.setTextColor(Color.parseColor("#4CAF50")); // Text Green
-            holder.imgTable.setColorFilter(Color.parseColor("#4CAF50")); // Icon Green
-            holder.container.setBackgroundColor(Color.WHITE); // White BG
+            holder.tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor("#4CAF50")));
         }
 
         holder.itemView.setOnClickListener(v -> listener.onTableClick(table));
@@ -78,16 +83,15 @@ public class WaiterTableAdapter extends RecyclerView.Adapter<WaiterTableAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvStatus;
-        ImageView imgTable;
-        LinearLayout container;
+        CardView cardTable;
+        TextView tvTableNumber, tvTableName, tvStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvName = itemView.findViewById(R.id.tvTableName);
+            cardTable = itemView.findViewById(R.id.cardTable);
+            tvTableNumber = itemView.findViewById(R.id.tvTableNumber);
+            tvTableName = itemView.findViewById(R.id.tvTableName);
             tvStatus = itemView.findViewById(R.id.tvStatus);
-            imgTable = itemView.findViewById(R.id.imgTable);
-            container = itemView.findViewById(R.id.container);
         }
     }
 }

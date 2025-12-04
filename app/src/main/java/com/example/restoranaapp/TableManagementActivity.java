@@ -47,8 +47,8 @@ public class TableManagementActivity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         rvTables = findViewById(R.id.rvTables);
-        // Use GridLayoutManager with 3 columns for floor plan layout
-        rvTables.setLayoutManager(new GridLayoutManager(this, 3));
+        // Use GridLayoutManager with 2 columns for mobile
+        rvTables.setLayoutManager(new GridLayoutManager(this, 2));
         
         tvEmptyState = findViewById(R.id.tvEmptyState);
         fabAdd = findViewById(R.id.fabAddTable);
@@ -80,14 +80,24 @@ public class TableManagementActivity extends AppCompatActivity {
     }
 
     private void showDeleteConfirmation(RestaurantTable table) {
+        int position = tableList.indexOf(table);
         new AlertDialog.Builder(this)
-                .setTitle("Silme Onayı")
-                .setMessage("Bu masa pasif duruma getirilecek. Emin misiniz?")
+                .setTitle(table.getIsActive() == 1 ? "Pasif Yap" : "Aktif Yap")
+                .setMessage(table.getIsActive() == 1 ? "Bu masa pasif duruma getirilecek. Emin misiniz?" : "Bu masa aktif duruma getirilecek. Emin misiniz?")
                 .setPositiveButton("Evet", (dialog, which) -> {
-                    table.setIsActive(0);
+                    // Toggle isActive status
+                    int newStatus = table.getIsActive() == 1 ? 0 : 1;
+                    table.setIsActive(newStatus);
+                    
+                    // Update database
                     tableDao.updateTable(table);
-                    loadTables();
-                    Toast.makeText(this, "Masa pasif yapıldı.", Toast.LENGTH_SHORT).show();
+                    
+                    // Update UI immediately without full reload
+                    if (position != -1 && adapter != null) {
+                        adapter.notifyItemChanged(position);
+                    }
+                    
+                    Toast.makeText(this, table.getIsActive() == 1 ? "Masa aktif yapıldı ✓" : "Masa pasif yapıldı ✓", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Hayır", null)
                 .show();
