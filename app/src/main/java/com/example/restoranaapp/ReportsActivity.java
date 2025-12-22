@@ -3,33 +3,21 @@ package com.example.restoranaapp;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restoranaapp.adapter.SalesReportAdapter;
 import com.example.restoranaapp.database.dao.OrderDao;
 import com.example.restoranaapp.model.ProductSalesReport;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,10 +29,6 @@ public class ReportsActivity extends AppCompatActivity {
     private ImageButton btnPreviousDate, btnNextDate;
     private RecyclerView rvSales;
     private SalesReportAdapter adapter;
-    
-    // Charts
-    private LineChart lineChartRevenue;
-    private PieChart pieChartCategory;
 
     private int selectedTab = 0; // 0=Daily, 1=Weekly, 2=Monthly
     private Calendar currentCalendar;
@@ -58,7 +42,6 @@ public class ReportsActivity extends AppCompatActivity {
         currentCalendar = Calendar.getInstance();
 
         initViews();
-        initCharts();
         updateData();
         updateDateDisplay();
     }
@@ -76,10 +59,6 @@ public class ReportsActivity extends AppCompatActivity {
         btnMonthly = findViewById(R.id.btnMonthly);
         btnPreviousDate = findViewById(R.id.btnPreviousDate);
         btnNextDate = findViewById(R.id.btnNextDate);
-        
-        // Initialize charts
-        lineChartRevenue = findViewById(R.id.lineChartRevenue);
-        pieChartCategory = findViewById(R.id.pieChartCategory);
 
         rvSales = findViewById(R.id.rvSales);
         rvSales.setLayoutManager(new LinearLayoutManager(this));
@@ -89,17 +68,14 @@ public class ReportsActivity extends AppCompatActivity {
         btnDaily.setOnClickListener(v -> {
             setTab(0);
             updateData();
-            generateDummyChartData();
         });
         btnWeekly.setOnClickListener(v -> {
             setTab(1);
             updateData();
-            generateDummyChartData();
         });
         btnMonthly.setOnClickListener(v -> {
             setTab(2);
             updateData();
-            generateDummyChartData();
         });
         
         btnPreviousDate.setOnClickListener(v -> {
@@ -183,104 +159,6 @@ public class ReportsActivity extends AppCompatActivity {
         return new String[]{start, end};
     }
     
-    private void initCharts() {
-        // Configure LineChart
-        lineChartRevenue.getDescription().setEnabled(false);
-        lineChartRevenue.setTouchEnabled(true);
-        lineChartRevenue.setDragEnabled(true);
-        lineChartRevenue.setScaleEnabled(false);
-        lineChartRevenue.setPinchZoom(false);
-        lineChartRevenue.setDrawGridBackground(false);
-        lineChartRevenue.getXAxis().setDrawGridLines(false);
-        lineChartRevenue.getAxisLeft().setDrawGridLines(true);
-        lineChartRevenue.getAxisRight().setEnabled(false);
-        lineChartRevenue.getLegend().setEnabled(false);
-        lineChartRevenue.animateY(1000);
-        
-        // Configure PieChart
-        pieChartCategory.getDescription().setEnabled(false);
-        pieChartCategory.setRotationEnabled(true);
-        pieChartCategory.setHighlightPerTapEnabled(true);
-        pieChartCategory.setEntryLabelColor(Color.BLACK);
-        pieChartCategory.setEntryLabelTextSize(12f);
-        pieChartCategory.animateY(1000);
-        pieChartCategory.getLegend().setEnabled(true);
-        
-        // Generate initial dummy data
-        generateDummyChartData();
-    }
-    
-    private void generateDummyChartData() {
-        // LineChart - Revenue Trend (Dummy Data)
-        ArrayList<Entry> lineEntries = new ArrayList<>();
-        
-        if (selectedTab == 0) {
-            // Daily: Hourly data (24 hours)
-            lineEntries.add(new Entry(9f, 200f));
-            lineEntries.add(new Entry(10f, 350f));
-            lineEntries.add(new Entry(11f, 480f));
-            lineEntries.add(new Entry(12f, 950f));
-            lineEntries.add(new Entry(13f, 1200f));
-            lineEntries.add(new Entry(14f, 850f));
-            lineEntries.add(new Entry(15f, 600f));
-            lineEntries.add(new Entry(16f, 400f));
-            lineEntries.add(new Entry(17f, 550f));
-            lineEntries.add(new Entry(18f, 800f));
-            lineEntries.add(new Entry(19f, 1350f));
-            lineEntries.add(new Entry(20f, 1500f));
-            lineEntries.add(new Entry(21f, 1100f));
-            lineEntries.add(new Entry(22f, 750f));
-        } else if (selectedTab == 1) {
-            // Weekly: Daily data (7 days)
-            lineEntries.add(new Entry(1f, 3200f));
-            lineEntries.add(new Entry(2f, 4100f));
-            lineEntries.add(new Entry(3f, 3800f));
-            lineEntries.add(new Entry(4f, 5200f));
-            lineEntries.add(new Entry(5f, 6800f));
-            lineEntries.add(new Entry(6f, 7500f));
-            lineEntries.add(new Entry(7f, 6200f));
-        } else {
-            // Monthly: Weekly data (4 weeks)
-            lineEntries.add(new Entry(1f, 18500f));
-            lineEntries.add(new Entry(2f, 22300f));
-            lineEntries.add(new Entry(3f, 25800f));
-            lineEntries.add(new Entry(4f, 28900f));
-        }
-        
-        LineDataSet lineDataSet = new LineDataSet(lineEntries, "Ciro (₺)");
-        lineDataSet.setColor(Color.parseColor("#ec7813")); // Primary orange
-        lineDataSet.setCircleColor(Color.parseColor("#ec7813"));
-        lineDataSet.setLineWidth(3f);
-        lineDataSet.setCircleRadius(5f);
-        lineDataSet.setDrawCircleHole(false);
-        lineDataSet.setValueTextSize(10f);
-        lineDataSet.setDrawFilled(true);
-        lineDataSet.setFillColor(Color.parseColor("#ec781333")); // Light orange fill
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        
-        LineData lineData = new LineData(lineDataSet);
-        lineChartRevenue.setData(lineData);
-        lineChartRevenue.invalidate();
-        
-        // PieChart - Category Distribution (Dummy Data)
-        ArrayList<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry(40f, "Yemek"));
-        pieEntries.add(new PieEntry(30f, "İçecek"));
-        pieEntries.add(new PieEntry(15f, "Tatlı"));
-        pieEntries.add(new PieEntry(10f, "Aperatif"));
-        pieEntries.add(new PieEntry(5f, "Diğer"));
-        
-        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Kategoriler");
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        pieDataSet.setValueTextColor(Color.WHITE);
-        pieDataSet.setValueTextSize(14f);
-        pieDataSet.setSliceSpace(3f);
-        
-        PieData pieData = new PieData(pieDataSet);
-        pieChartCategory.setData(pieData);
-        pieChartCategory.invalidate();
-    }
-    
     private void navigateDate(int direction) {
         // Navigate by day, week, or month based on selected tab
         if (selectedTab == 0) {
@@ -293,7 +171,6 @@ public class ReportsActivity extends AppCompatActivity {
         
         updateDateDisplay();
         updateData();
-        generateDummyChartData();
     }
     
     private void updateDateDisplay() {

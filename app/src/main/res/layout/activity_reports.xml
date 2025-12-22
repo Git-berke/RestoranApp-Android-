@@ -296,68 +296,6 @@
                     android:contentDescription="Sonraki Tarih" />
             </LinearLayout>
 
-            <!-- Revenue Trend Chart (LineChart) -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ciro Trendi"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_dark"
-                        android:layout_marginBottom="12dp"/>
-
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/lineChartRevenue"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Category Distribution (PieChart) -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Kategori Dağılımı"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_dark"
-                        android:layout_marginBottom="12dp"/>
-
-                    <com.github.mikephil.charting.charts.PieChart
-                        android:id="@+id/pieChartCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
             <!-- List Header -->
             <TextView
                 android:layout_width="wrap_content"
