@@ -1,3 +1,51 @@
 <resources>
-    <string name="app_name">RestoranaApp</string>
+    <string name="app_name">RestoMate</string>
+    <string name="login_title">RestoMate</string>
+    <string name="login_subtitle">Lezzet Yönetim Sistemi</string>
+    <string name="username_label">Kullanıcı Adı</string>
+    <string name="password_label">Şifre</string>
+    <string name="username_hint">Kullanıcı adınızı girin</string>
+    <string name="password_hint">Şifrenizi girin</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="error_empty_fields">Kullanıcı adı ve şifre boş bırakılamaz.</string>
+    <string name="error_invalid_credentials">Geçersiz kullanıcı adı veya şifre.</string>
+    
+    <!-- Stock Tracking -->
+    <string name="stock_tracking_title">Stok Takibi</string>
+    <string name="total_products">Toplam Ürün</string>
+    <string name="low_stock">Kritik Stok</string>
+    <string name="search_product">Ürün ara...</string>
+    <string name="no_stock_data">Henüz stok verisi yok</string>
+    <string name="add_products_from_menu">Menü Yönetimi\'nden ürün ekleyin</string>
+    <string name="edit_stock">Stok Düzenle</string>
+    <string name="current_amount">Mevcut Miktar</string>
+    <string name="unit">Birim</string>
+    <string name="critical_level">Kritik Seviye</string>
+    <string name="stock_updated">Stok bilgisi güncellendi</string>
+    <string name="invalid_number">Geçersiz sayı formatı</string>
+    <string name="fill_all_fields">Lütfen tüm alanları doldurun</string>
+    
+    <!-- Settings -->
+    <string name="general_settings">Genel Ayarlar</string>
+    <string name="restaurant_info">Restoran Bilgileri</string>
+    <string name="business_name">İşletme Adı</string>
+    <string name="address">Adres</string>
+    <string name="phone">Telefon</string>
+    <string name="printer_settings">Yazıcı Ayarları</string>
+    <string name="printer_ip">Yazıcı IP Adresi</string>
+    <string name="paper_width">Kağıt Genişliği</string>
+    <string name="system">Sistem</string>
+    <string name="dark_mode">Koyu Mod</string>
+    <string name="dark_mode_desc">Karanlık tema kullan</string>
+    <string name="vat_rate">Varsayılan KDV Oranı (%)</string>
+    <string name="save_settings">Ayarları Kaydet</string>
+    <string name="settings_saved">Ayarlar kaydedildi</string>
+    <string name="vat_rate_invalid">KDV oranı 0-100 arasında olmalıdır</string>
+    <string name="invalid_vat_rate">Geçersiz KDV oranı</string>
+    
+    <!-- Common -->
+    <string name="back">Geri</string>
+    <string name="edit">Düzenle</string>
+    <string name="cancel">İptal</string>
+    <string name="save">Kaydet</string>
 </resources>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yeni Malzeme Ekle"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_dark"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Ingredient Name -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Malzeme Adı"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_dark"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/etIngredientName"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/input_background"
+        android:hint="Örn: Domates"
+        android:inputType="text"
+        android:paddingHorizontal="16dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Category -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kategori"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_dark"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/input_background"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Quantity -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Miktar"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_dark"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/etQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/input_background"
+        android:hint="Miktar girin"
+        android:inputType="numberDecimal"
+        android:paddingHorizontal="16dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Unit -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Birim"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_dark"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spinnerUnit"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/input_background"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Critical Threshold -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kritik Seviye"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_dark"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/etCriticalThreshold"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/input_background"
+        android:hint="Kritik seviye girin"
+        android:inputType="numberDecimal"
+        android:paddingHorizontal="16dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="İptal"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/text_gray"
+            android:textColor="@color/white"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="Ekle"
+            android:textAllCaps="false"
+            android:background="@drawable/button_primary"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>
+

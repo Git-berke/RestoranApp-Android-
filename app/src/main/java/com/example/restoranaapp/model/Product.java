@@ -7,6 +7,9 @@ public class Product {
     private double price;
     private int categoryId;
     private String imagePath;
+    private double stockQuantity;
+    private String stockUnit;
+    private double criticalLevel;
     private int isActive;
     private String createdAt;
     private String updatedAt;
@@ -93,6 +96,34 @@ public class Product {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public double getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(double stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public String getStockUnit() {
+        return stockUnit;
+    }
+
+    public void setStockUnit(String stockUnit) {
+        this.stockUnit = stockUnit;
+    }
+
+    public double getCriticalLevel() {
+        return criticalLevel;
+    }
+
+    public void setCriticalLevel(double criticalLevel) {
+        this.criticalLevel = criticalLevel;
+    }
+
+    public boolean isLowStock() {
+        return stockQuantity < criticalLevel;
     }
 }
 

@@ -65,7 +65,7 @@ public class MenuManagementActivity extends AppCompatActivity {
     
     // Image Handling
     private ImageView dialogImgPreview;
-    private Uri selectedImageUri;
+    private String selectedImagePath; // Stores either URI string or URL string
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private ActivityResultLauncher<String> requestPermissionLauncher;
 
@@ -88,9 +88,16 @@ public class MenuManagementActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        selectedImageUri = result.getData().getData();
-                        if (dialogImgPreview != null) {
-                            dialogImgPreview.setImageURI(selectedImageUri);
+                        Uri imageUri = result.getData().getData();
+                        if (imageUri != null && dialogImgPreview != null) {
+                            // Save to internal storage and get path
+                            selectedImagePath = saveImageToInternalStorage(imageUri);
+                            if (selectedImagePath != null) {
+                                loadImageWithGlide(selectedImagePath);
+                                Toast.makeText(this, "Görsel seçildi ✓", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(this, "Görsel kaydedilemedi", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 }
@@ -106,6 +113,20 @@ public class MenuManagementActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    /**
+     * Loads image using Glide - works with both local file paths and HTTP URLs
+     */
+    private void loadImageWithGlide(String imagePath) {
+        if (dialogImgPreview != null && imagePath != null && !imagePath.isEmpty()) {
+            Glide.with(this)
+                .load(imagePath)
+                .placeholder(R.drawable.ic_food_placeholder)
+                .error(R.drawable.ic_food_placeholder)
+                .centerCrop()
+                .into(dialogImgPreview);
+        }
     }
 
     private void openGallery() {
@@ -279,9 +300,15 @@ public class MenuManagementActivity extends AppCompatActivity {
         EditText etDesc = view.findViewById(R.id.etProdDesc);
         EditText etPrice = view.findViewById(R.id.etProdPrice);
         Spinner spinnerCat = view.findViewById(R.id.spinnerCategory);
-        EditText etImageUrl = view.findViewById(R.id.etImageUrl);
+        
+        // Image components
         dialogImgPreview = view.findViewById(R.id.imgProductPreview);
+        View btnPickFromGallery = view.findViewById(R.id.btnPickFromGallery);
+        View btnEnterUrl = view.findViewById(R.id.btnEnterUrl);
+        View layoutUrlInput = view.findViewById(R.id.layoutUrlInput);
+        EditText etImageUrl = view.findViewById(R.id.etImageUrl);
         ImageView btnPaste = view.findViewById(R.id.btnPaste);
+        View btnLoadUrl = view.findViewById(R.id.btnLoadUrl);
 
         // Setup Spinner
         List<String> catNames = new ArrayList<>();
@@ -296,8 +323,9 @@ public class MenuManagementActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCat.setAdapter(spinnerAdapter);
 
-        selectedImageUri = null; // Reset
+        selectedImagePath = null; // Reset
 
+        // Load existing product data
         if (product != null) {
             etName.setText(product.getName());
             etDesc.setText(product.getDescription());
@@ -305,95 +333,109 @@ public class MenuManagementActivity extends AppCompatActivity {
             int index = catIds.indexOf(product.getCategoryId());
             if (index != -1) spinnerCat.setSelection(index);
             
-            if (product.getImagePath() != null) {
-                etImageUrl.setText(product.getImagePath());
-                Glide.with(this)
-                    .load(product.getImagePath())
-                    .placeholder(R.drawable.ic_food_placeholder)
-                    .error(R.drawable.ic_food_placeholder)
-                    .into(dialogImgPreview);
+            if (product.getImagePath() != null && !product.getImagePath().isEmpty()) {
+                selectedImagePath = product.getImagePath();
+                loadImageWithGlide(selectedImagePath);
             }
         }
         
-        // Paste Logic
+        // Gallery button click
+        btnPickFromGallery.setOnClickListener(v -> {
+            layoutUrlInput.setVisibility(View.GONE);
+            checkPermissionAndOpenGallery();
+        });
+        
+        // URL button click - toggle URL input visibility
+        btnEnterUrl.setOnClickListener(v -> {
+            if (layoutUrlInput.getVisibility() == View.VISIBLE) {
+                layoutUrlInput.setVisibility(View.GONE);
+            } else {
+                layoutUrlInput.setVisibility(View.VISIBLE);
+                etImageUrl.requestFocus();
+            }
+        });
+        
+        // Paste button click
         btnPaste.setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard != null && clipboard.hasPrimaryClip()) {
                 ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
                 if (item != null && item.getText() != null) {
-                    String pasteData = item.getText().toString();
+                    String pasteData = item.getText().toString().trim();
                     etImageUrl.setText(pasteData);
-                    // Trigger load
-                    if(!pasteData.isEmpty()){
-                        Glide.with(this)
-                            .load(pasteData)
-                            .placeholder(R.drawable.ic_food_placeholder)
-                            .error(R.drawable.ic_food_placeholder)
-                            .into(dialogImgPreview);
-                        Toast.makeText(this, "Yapıştırıldı!", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(this, "Yapıştırıldı ✓", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Pano boş veya metin değil", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Pano boş", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         
-        etImageUrl.setOnFocusChangeListener((v, hasFocus) -> {
-            if(!hasFocus){
-                String url = etImageUrl.getText().toString().trim();
-                if(!url.isEmpty()){
-                    Glide.with(this)
-                        .load(url)
-                        .placeholder(R.drawable.ic_food_placeholder)
-                        .error(R.drawable.ic_food_placeholder)
-                        .into(dialogImgPreview);
+        // Load URL button click
+        btnLoadUrl.setOnClickListener(v -> {
+            String url = etImageUrl.getText().toString().trim();
+            if (!url.isEmpty()) {
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    selectedImagePath = url;
+                    loadImageWithGlide(selectedImagePath);
+                    layoutUrlInput.setVisibility(View.GONE);
+                    Toast.makeText(this, "Görsel yüklendi ✓", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Geçerli bir URL girin (http:// veya https://)", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(this, "URL boş olamaz", Toast.LENGTH_SHORT).show();
             }
         });
-        
-        dialogImgPreview.setOnClickListener(v -> checkPermissionAndOpenGallery());
 
         builder.setPositiveButton("Kaydet", (dialog, which) -> {
             String name = etName.getText().toString().trim();
             String priceStr = etPrice.getText().toString().trim();
             String desc = etDesc.getText().toString().trim();
-            String imageUrl = etImageUrl.getText().toString().trim();
             
             if (name.isEmpty() || priceStr.isEmpty() || catIds.isEmpty()) {
-                Toast.makeText(this, "Eksik bilgi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Lütfen zorunlu alanları doldurun", Toast.LENGTH_SHORT).show();
                 return;
             }
             
-            double price = Double.parseDouble(priceStr);
-            int catId = catIds.get(spinnerCat.getSelectedItemPosition());
-            
-            String finalImagePath = imageUrl;
-            if (selectedImageUri != null) {
-                finalImagePath = saveImageToInternalStorage(selectedImageUri);
-            } else if (finalImagePath.isEmpty() && product != null) {
-                finalImagePath = product.getImagePath(); // keep old if nothing new
-            }
+            try {
+                double price = Double.parseDouble(priceStr);
+                int catId = catIds.get(spinnerCat.getSelectedItemPosition());
+                
+                // Use selectedImagePath (either gallery or URL)
+                String finalImagePath = selectedImagePath;
+                if (finalImagePath == null || finalImagePath.isEmpty()) {
+                    if (product != null) {
+                        finalImagePath = product.getImagePath(); // Keep old image
+                    } else {
+                        finalImagePath = ""; // No image
+                    }
+                }
 
-            if (product == null) {
-                Product newP = new Product();
-                newP.setName(name);
-                newP.setDescription(desc);
-                newP.setPrice(price);
-                newP.setCategoryId(catId);
-                newP.setIsActive(1);
-                newP.setImagePath(finalImagePath);
-                productDao.addProduct(newP);
-                Toast.makeText(this, "Ürün eklendi", Toast.LENGTH_SHORT).show();
-            } else {
-                product.setName(name);
-                product.setDescription(desc);
-                product.setPrice(price);
-                product.setCategoryId(catId);
-                product.setImagePath(finalImagePath);
-                productDao.updateProduct(product);
-                Toast.makeText(this, "Ürün güncellendi", Toast.LENGTH_SHORT).show();
+                if (product == null) {
+                    // Add new product
+                    Product newP = new Product();
+                    newP.setName(name);
+                    newP.setDescription(desc);
+                    newP.setPrice(price);
+                    newP.setCategoryId(catId);
+                    newP.setIsActive(1);
+                    newP.setImagePath(finalImagePath);
+                    productDao.addProduct(newP);
+                    Toast.makeText(this, "Ürün eklendi ✓", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Update existing product
+                    product.setName(name);
+                    product.setDescription(desc);
+                    product.setPrice(price);
+                    product.setCategoryId(catId);
+                    product.setImagePath(finalImagePath);
+                    productDao.updateProduct(product);
+                    Toast.makeText(this, "Ürün güncellendi ✓", Toast.LENGTH_SHORT).show();
+                }
+                loadProducts();
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Geçersiz fiyat formatı", Toast.LENGTH_SHORT).show();
             }
-            loadProducts();
         });
         builder.setNegativeButton("İptal", null);
         builder.show();
@@ -425,3 +467,4 @@ public class MenuManagementActivity extends AppCompatActivity {
         }
     }
 }
+

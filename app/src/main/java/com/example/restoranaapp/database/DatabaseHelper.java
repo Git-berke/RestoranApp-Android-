@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "RestoranaApp.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
 
     // Table Names
     public static final String TABLE_USERS = "users";
@@ -17,6 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_TABLES = "restaurant_tables";
     public static final String TABLE_ORDERS = "orders";
     public static final String TABLE_ORDER_ITEMS = "order_items";
+    public static final String TABLE_INGREDIENTS = "ingredients";
 
     // Common Columns
     public static final String COL_ID = "id";
@@ -40,11 +41,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_PRODUCT_PRICE = "price";
     public static final String COL_PRODUCT_CATEGORY_ID = "category_id";
     public static final String COL_PRODUCT_IMAGE_PATH = "image_path";
+    public static final String COL_PRODUCT_STOCK_QUANTITY = "stock_quantity";
+    public static final String COL_PRODUCT_STOCK_UNIT = "stock_unit";
+    public static final String COL_PRODUCT_CRITICAL_LEVEL = "critical_level";
 
     // Tables Table Columns
     public static final String COL_TABLE_NUMBER = "table_number";
     public static final String COL_TABLE_NAME = "table_name";
     public static final String COL_TABLE_STATUS = "status";
+    public static final String COL_TABLE_AREA = "area";
 
     // Orders Table Columns
     public static final String COL_ORDER_TABLE_ID = "table_id";
@@ -58,6 +63,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_ITEM_QUANTITY = "quantity";
     public static final String COL_ITEM_UNIT_PRICE = "unit_price";
     public static final String COL_ITEM_LINE_TOTAL = "line_total";
+
+    // Ingredients Table Columns
+    public static final String COL_INGREDIENT_NAME = "name";
+    public static final String COL_INGREDIENT_QUANTITY = "quantity";
+    public static final String COL_INGREDIENT_UNIT = "unit";
+    public static final String COL_INGREDIENT_CATEGORY = "category";
+    public static final String COL_INGREDIENT_CRITICAL_THRESHOLD = "critical_threshold";
 
     // Create Table Statements
 
@@ -91,6 +103,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COL_PRODUCT_PRICE + " REAL NOT NULL, "
             + COL_PRODUCT_CATEGORY_ID + " INTEGER NOT NULL, "
             + COL_PRODUCT_IMAGE_PATH + " TEXT, "
+            + COL_PRODUCT_STOCK_QUANTITY + " REAL DEFAULT 0, "
+            + COL_PRODUCT_STOCK_UNIT + " TEXT DEFAULT 'Adet', "
+            + COL_PRODUCT_CRITICAL_LEVEL + " REAL DEFAULT 10, "
             + COL_IS_ACTIVE + " INTEGER NOT NULL DEFAULT 1, "
             + COL_CREATED_AT + " TEXT, "
             + COL_UPDATED_AT + " TEXT, "
@@ -102,7 +117,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COL_TABLE_NUMBER + " INTEGER UNIQUE NOT NULL, "
             + COL_TABLE_NAME + " TEXT, "
-            + COL_TABLE_STATUS + " TEXT NOT NULL, " // EMPTY, ACTIVE
+            + COL_TABLE_STATUS + " TEXT NOT NULL, " // EMPTY, ACTIVE, RESERVED
+            + COL_TABLE_AREA + " TEXT DEFAULT 'Salon', "
             + COL_IS_ACTIVE + " INTEGER NOT NULL DEFAULT 1, "
             + COL_CREATED_AT + " TEXT, "
             + COL_UPDATED_AT + " TEXT"
@@ -135,6 +151,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + "FOREIGN KEY(" + COL_ITEM_PRODUCT_ID + ") REFERENCES " + TABLE_PRODUCTS + "(" + COL_ID + ")"
             + ")";
 
+    // 7.7 ingredients
+    private static final String CREATE_TABLE_INGREDIENTS = "CREATE TABLE " + TABLE_INGREDIENTS + "("
+            + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COL_INGREDIENT_NAME + " TEXT NOT NULL, "
+            + COL_INGREDIENT_QUANTITY + " REAL NOT NULL DEFAULT 0, "
+            + COL_INGREDIENT_UNIT + " TEXT NOT NULL, "
+            + COL_INGREDIENT_CATEGORY + " TEXT NOT NULL, "
+            + COL_INGREDIENT_CRITICAL_THRESHOLD + " REAL NOT NULL DEFAULT 10, "
+            + COL_CREATED_AT + " TEXT, "
+            + COL_UPDATED_AT + " TEXT"
+            + ")";
+
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -148,6 +176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TABLES);
         db.execSQL(CREATE_TABLE_ORDERS);
         db.execSQL(CREATE_TABLE_ORDER_ITEMS);
+        db.execSQL(CREATE_TABLE_INGREDIENTS);
 
         String adminSql = "INSERT INTO " + TABLE_USERS + " (" 
                 + COL_USERNAME + ", " + COL_PASSWORD + ", " + COL_ROLE + ", " + COL_IS_ACTIVE + ", " + COL_CREATED_AT + ") VALUES "
@@ -168,7 +197,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         
-        // For future versions, add else if (oldVersion < 3) ...
+        if (oldVersion < 3) {
+            // Migration from V2 to V3: Add inventory columns to products table
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_PRODUCTS + " ADD COLUMN " + COL_PRODUCT_STOCK_QUANTITY + " REAL DEFAULT 0");
+                db.execSQL("ALTER TABLE " + TABLE_PRODUCTS + " ADD COLUMN " + COL_PRODUCT_STOCK_UNIT + " TEXT DEFAULT 'Adet'");
+                db.execSQL("ALTER TABLE " + TABLE_PRODUCTS + " ADD COLUMN " + COL_PRODUCT_CRITICAL_LEVEL + " REAL DEFAULT 10");
+            } catch (Exception e) {
+                // Columns might already exist or other error, log it but don't crash
+            }
+        }
+        
+        if (oldVersion < 4) {
+            // Migration from V3 to V4: Create ingredients table
+            try {
+                db.execSQL(CREATE_TABLE_INGREDIENTS);
+            } catch (Exception e) {
+                // Table might already exist or other error, log it but don't crash
+            }
+        }
+        
+        if (oldVersion < 5) {
+            // Migration from V4 to V5: Add area column to tables
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_TABLES + " ADD COLUMN " + COL_TABLE_AREA + " TEXT DEFAULT 'Salon'");
+            } catch (Exception e) {
+                // Column might already exist or other error, log it but don't crash
+            }
+        }
+        
+        // For future versions, add else if (oldVersion < 6) ...
     }
     
     @Override

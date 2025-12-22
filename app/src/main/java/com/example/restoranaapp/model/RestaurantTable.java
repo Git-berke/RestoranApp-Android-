@@ -4,7 +4,8 @@ public class RestaurantTable {
     private int id;
     private int tableNumber;
     private String tableName;
-    private String status; // EMPTY, ACTIVE
+    private String status; // EMPTY, ACTIVE, RESERVED
+    private String area; // Salon, Bahçe, Teras
     private int isActive;
     private String createdAt;
     private String updatedAt;
@@ -12,10 +13,11 @@ public class RestaurantTable {
     public RestaurantTable() {
     }
 
-    public RestaurantTable(int tableNumber, String tableName, String status, int isActive) {
+    public RestaurantTable(int tableNumber, String tableName, String status, String area, int isActive) {
         this.tableNumber = tableNumber;
         this.tableName = tableName;
         this.status = status;
+        this.area = area;
         this.isActive = isActive;
     }
 
@@ -73,6 +75,14 @@ public class RestaurantTable {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }
 

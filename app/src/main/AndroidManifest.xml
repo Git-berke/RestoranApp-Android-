@@ -31,6 +31,7 @@
         <activity android:name=".WaiterManagementActivity" android:exported="false"/>
         <activity android:name=".TableManagementActivity" android:exported="false"/>
         <activity android:name=".ReportsActivity" android:exported="false"/>
+        <activity android:name=".StockTrackingActivity" android:exported="false"/>
         
         <!-- Waiter Module -->
         <activity android:name=".WaiterMainActivity" android:exported="false"/>

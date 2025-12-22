@@ -1,266 +1,336 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/app_background"
-    android:padding="24dp"
+    android:fillViewport="true"
     tools:context=".AdminMainActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Admin Paneli"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_dark"
-            android:layout_centerVertical="true"/>
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Çıkış"
-            android:layout_alignParentEnd="true"
-            android:backgroundTint="#EF5350"
-            android:textColor="@color/white"
-            android:minHeight="40dp"
-            android:layout_centerVertical="true"/>
-
-    </RelativeLayout>
-
-    <!-- Cards ... (same structure, updated text colors indirectly via text_dark if used or kept black) -->
-    <!-- Reusing card_background which is white, looks good on cream bg -->
-    
-    <!-- Card 1: Menu Management -->
     <LinearLayout
-        android:id="@+id/cardMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_background"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true">
+        android:orientation="vertical"
+        android:padding="24dp">
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/icon_bg">
+        <!-- Header with Logout Icon -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Admin Paneli"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"
+                android:layout_centerVertical="true"/>
+
+            <!-- Logout Icon Button -->
+            <FrameLayout
+                android:id="@+id/btnLogout"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_bg"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_logout"
+                    android:contentDescription="Çıkış"
+                    app:tint="#EF5350"/>
+            </FrameLayout>
+
+        </RelativeLayout>
+
+        <!-- Card 1: Menu Management -->
+        <LinearLayout
+            android:id="@+id/cardMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/icon_bg">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_menu_book"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary_orange"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Menü Yönetimi"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yemekleri ve kategorileri düzenle"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_menu_book"
-                android:layout_gravity="center"
-                app:tint="@color/primary_orange"/>
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Menü Yönetimi"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_dark"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Manage dishes and categories"
-                android:textSize="14sp"
-                android:textColor="@color/text_gray"
-                android:layout_marginTop="4dp"/>
+                android:src="@drawable/ic_chevron_right"
+                android:contentDescription="Go" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_chevron_right"
-            android:contentDescription="Go" />
-    </LinearLayout>
+        <!-- Card 2: Waiter Management -->
+        <LinearLayout
+            android:id="@+id/cardWaiter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true">
 
-    <!-- Card 2: Waiter Management -->
-    <LinearLayout
-        android:id="@+id/cardWaiter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card_background"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true">
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/icon_bg">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_people"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary_orange"/>
+            </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/icon_bg">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Garson Yönetimi"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Garson ekle, düzenle veya çıkar"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_people"
-                android:layout_gravity="center"
-                app:tint="@color/primary_orange"/>
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Garson Yönetimi"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_dark"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add, edit, or remove waiters"
-                android:textSize="14sp"
-                android:textColor="@color/text_gray"
-                android:layout_marginTop="4dp"/>
+                android:src="@drawable/ic_chevron_right"
+                android:contentDescription="Go" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_chevron_right"
-            android:contentDescription="Go" />
-    </LinearLayout>
+        <!-- Card 3: Table Management -->
+        <LinearLayout
+            android:id="@+id/cardTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true">
 
-    <!-- Card 3: Table Management -->
-    <LinearLayout
-        android:id="@+id/cardTable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card_background"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true">
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/icon_bg">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_table_restaurant"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary_orange"/>
+            </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/icon_bg">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Masa Yönetimi"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Masa durumlarını görüntüle ve yönet"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_table_restaurant"
-                android:layout_gravity="center"
-                app:tint="@color/primary_orange"/>
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Masa Yönetimi"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_dark"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View and manage table status"
-                android:textSize="14sp"
-                android:textColor="@color/text_gray"
-                android:layout_marginTop="4dp"/>
+                android:src="@drawable/ic_chevron_right"
+                android:contentDescription="Go" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_chevron_right"
-            android:contentDescription="Go" />
-    </LinearLayout>
+        <!-- Card 4: Reports -->
+        <LinearLayout
+            android:id="@+id/cardReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true">
 
-    <!-- Card 4: Reports -->
-    <LinearLayout
-        android:id="@+id/cardReports"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card_background"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true">
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/icon_bg">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_analytics"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary_orange"/>
+            </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/icon_bg">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Raporlar"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Satış ve performans raporlarına eriş"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_analytics"
-                android:layout_gravity="center"
-                app:tint="@color/primary_orange"/>
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Raporlar"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_dark"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Access sales and performance reports"
-                android:textSize="14sp"
-                android:textColor="@color/text_gray"
-                android:layout_marginTop="4dp"/>
+                android:src="@drawable/ic_chevron_right"
+                android:contentDescription="Go" />
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_chevron_right"
-            android:contentDescription="Go" />
-    </LinearLayout>
+        <!-- Card 5: Stock Tracking (NEW) -->
+        <LinearLayout
+            android:id="@+id/cardStock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true">
 
-</LinearLayout>
+            <FrameLayout
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/icon_bg">
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_box"
+                    android:layout_gravity="center"
+                    app:tint="@color/primary_orange"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stok Takibi"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_dark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ürün stoklarını ve kritik seviyeleri izle"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_gray"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_chevron_right"
+                android:contentDescription="Go" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

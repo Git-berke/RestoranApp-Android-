@@ -3,9 +3,11 @@ package com.example.restoranaapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +21,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btnLogin;
     private TextView tvError;
+    private ImageView ivTogglePassword;
     private UserDao userDao;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvError = findViewById(R.id.tvError);
+        ivTogglePassword = findViewById(R.id.ivTogglePassword);
 
         userDao = new UserDao(this);
 
@@ -47,6 +52,30 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+        // Password visibility toggle
+        ivTogglePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                togglePasswordVisibility();
+            }
+        });
+    }
+
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            // Hide password
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            ivTogglePassword.setImageResource(R.drawable.ic_visibility);
+            isPasswordVisible = false;
+        } else {
+            // Show password
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            ivTogglePassword.setImageResource(R.drawable.ic_visibility_off);
+            isPasswordVisible = true;
+        }
+        // Move cursor to end
+        etPassword.setSelection(etPassword.getText().length());
     }
 
     private void attemptLogin() {

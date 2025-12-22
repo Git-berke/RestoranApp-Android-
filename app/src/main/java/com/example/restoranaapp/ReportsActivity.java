@@ -3,12 +3,11 @@ package com.example.restoranaapp;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,19 +18,20 @@ import com.example.restoranaapp.model.ProductSalesReport;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class ReportsActivity extends AppCompatActivity {
 
     private OrderDao orderDao;
-    private TextView tvRevenue, tvTotalItems, tvTopProduct;
+    private TextView tvRevenue, tvTotalItems, tvTopProduct, tvCurrentDate;
     private Button btnDaily, btnWeekly, btnMonthly;
+    private ImageButton btnPreviousDate, btnNextDate;
     private RecyclerView rvSales;
     private SalesReportAdapter adapter;
 
     private int selectedTab = 0; // 0=Daily, 1=Weekly, 2=Monthly
+    private Calendar currentCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +39,11 @@ public class ReportsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reports);
 
         orderDao = new OrderDao(this);
+        currentCalendar = Calendar.getInstance();
 
         initViews();
         updateData();
+        updateDateDisplay();
     }
 
     private void initViews() {
@@ -50,10 +52,13 @@ public class ReportsActivity extends AppCompatActivity {
         tvRevenue = findViewById(R.id.tvRevenue);
         tvTotalItems = findViewById(R.id.tvTotalItems);
         tvTopProduct = findViewById(R.id.tvTopProduct);
+        tvCurrentDate = findViewById(R.id.tvCurrentDate);
         
         btnDaily = findViewById(R.id.btnDaily);
         btnWeekly = findViewById(R.id.btnWeekly);
         btnMonthly = findViewById(R.id.btnMonthly);
+        btnPreviousDate = findViewById(R.id.btnPreviousDate);
+        btnNextDate = findViewById(R.id.btnNextDate);
 
         rvSales = findViewById(R.id.rvSales);
         rvSales.setLayoutManager(new LinearLayoutManager(this));
@@ -71,6 +76,14 @@ public class ReportsActivity extends AppCompatActivity {
         btnMonthly.setOnClickListener(v -> {
             setTab(2);
             updateData();
+        });
+        
+        btnPreviousDate.setOnClickListener(v -> {
+            navigateDate(-1);
+        });
+        
+        btnNextDate.setOnClickListener(v -> {
+            navigateDate(1);
         });
     }
 
@@ -144,5 +157,32 @@ public class ReportsActivity extends AppCompatActivity {
         
         String start = sdf.format(cal.getTime());
         return new String[]{start, end};
+    }
+    
+    private void navigateDate(int direction) {
+        // Navigate by day, week, or month based on selected tab
+        if (selectedTab == 0) {
+            currentCalendar.add(Calendar.DAY_OF_YEAR, direction);
+        } else if (selectedTab == 1) {
+            currentCalendar.add(Calendar.WEEK_OF_YEAR, direction);
+        } else {
+            currentCalendar.add(Calendar.MONTH, direction);
+        }
+        
+        updateDateDisplay();
+        updateData();
+    }
+    
+    private void updateDateDisplay() {
+        SimpleDateFormat sdf;
+        if (selectedTab == 0) {
+            sdf = new SimpleDateFormat("dd MMM yyyy", new Locale("tr"));
+        } else if (selectedTab == 1) {
+            sdf = new SimpleDateFormat("'Hafta' w, yyyy", new Locale("tr"));
+        } else {
+            sdf = new SimpleDateFormat("MMMM yyyy", new Locale("tr"));
+        }
+        
+        tvCurrentDate.setText(sdf.format(currentCalendar.getTime()));
     }
 }

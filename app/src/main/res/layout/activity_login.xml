@@ -1,103 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="32dp"
-    android:gravity="center"
     android:background="@color/app_background"
+    android:fillViewport="true"
     tools:context=".LoginActivity">
-
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/loginfoto"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="RestoMate"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_dark"
-        android:layout_marginBottom="4dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lezzet Yönetim Sistemi"
-        android:textSize="16sp"
-        android:textColor="@color/text_gray"
-        android:layout_marginBottom="48dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="start">
-        
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Kullanıcı Adı"
-            android:textSize="16sp"
-            android:textColor="@color/text_dark"
-            android:layout_marginBottom="8dp" />
-
-        <EditText
-            android:id="@+id/etUsername"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/edit_text_bg"
-            android:hint="Kullanıcı adınızı girin"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:inputType="text"
-            android:textSize="16sp"
-            android:layout_marginBottom="24dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Şifre"
-            android:textSize="16sp"
-            android:textColor="@color/text_dark"
-            android:layout_marginBottom="8dp" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/edit_text_bg"
-            android:hint="Şifrenizi girin"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:inputType="textPassword"
-            android:textSize="16sp"
-            android:layout_marginBottom="32dp"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Giriş Yap"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/primary_orange" />
-
-    <TextView
-        android:id="@+id/tvError"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Geçersiz kullanıcı adı veya şifre."
-        android:textColor="#D32F2F"
         android:gravity="center"
-        android:layout_marginTop="16dp"
-        android:visibility="invisible" />
+        android:padding="24dp">
 
-</LinearLayout>
+        <!-- Logo Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="64dp"
+            android:paddingBottom="48dp">
+
+            <!-- Logo with circular background -->
+            <FrameLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="16dp">
+
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:background="@drawable/logo_background"/>
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_restaurant"
+                    android:contentDescription="@string/app_name"/>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_title"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.01"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_subtitle"
+                android:textSize="16sp"
+                android:textColor="@color/text_gray"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <!-- Form Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:maxWidth="400dp">
+
+            <!-- Username Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username_label"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Username Input -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_background"
+                    android:hint="@string/username_hint"
+                    android:textColorHint="@color/text_gray"
+                    android:textColor="@color/text_dark"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="16dp"
+                    android:inputType="text"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_person"
+                    android:contentDescription="Username icon"/>
+            </FrameLayout>
+
+            <!-- Password Label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password_label"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"
+                android:layout_marginBottom="8dp"/>
+
+            <!-- Password Input -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginBottom="24dp">
+
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/input_background"
+                    android:hint="@string/password_hint"
+                    android:textColorHint="@color/text_gray"
+                    android:textColor="@color/text_dark"
+                    android:paddingStart="48dp"
+                    android:paddingEnd="48dp"
+                    android:inputType="textPassword"
+                    android:textSize="16sp"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_lock"
+                    android:contentDescription="Password icon"/>
+
+                <ImageView
+                    android:id="@+id/ivTogglePassword"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_visibility"
+                    android:contentDescription="Toggle password visibility"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="4dp"/>
+            </FrameLayout>
+
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/login_button"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_primary"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Error Message -->
+            <TextView
+                android:id="@+id/tvError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/error_invalid_credentials"
+                android:textColor="#D32F2F"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
